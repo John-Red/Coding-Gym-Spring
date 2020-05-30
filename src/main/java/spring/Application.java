@@ -17,7 +17,5 @@ public class Application {
 
         Singleton secondSingleton = context.getBean(Singleton.class);
         Prototype secProt = secondSingleton.getPrototype();
-
-        System.out.println(firstPrototype.equals(secProt));
     }
 }
