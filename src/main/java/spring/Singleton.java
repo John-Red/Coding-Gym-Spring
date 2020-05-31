@@ -5,23 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.stereotype.Component;
 
-import java.util.concurrent.TimeUnit;
-
 @Component
-@Slf4j
-@Profiling
+@ProfilingAnnotation
 public class Singleton implements BaseSingleton{
-    @Autowired
-    private Prototype prototype;
-
 
     public Singleton(){
-        log.info("Singleton: I'm alive");
-    }
-
-    @Lookup
-    public Prototype getPrototype (){
-        return null;
+        System.out.println("Singleton: I'm alive");
     }
 
     public void doSomething() throws InterruptedException {

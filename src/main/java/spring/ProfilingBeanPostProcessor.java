@@ -5,11 +5,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.stereotype.Component;
 
-import javax.management.InstanceAlreadyExistsException;
-import javax.management.MBeanRegistrationException;
 import javax.management.MBeanServer;
-import javax.management.MalformedObjectNameException;
-import javax.management.NotCompliantMBeanException;
 import javax.management.ObjectName;
 import java.lang.management.ManagementFactory;
 import java.lang.reflect.InvocationHandler;
@@ -22,7 +18,7 @@ import java.util.Map;
 @Slf4j
 @Component
 public class ProfilingBeanPostProcessor implements BeanPostProcessor {
-    Map<String, Class> map = new HashMap<>();
+    private Map<String, Class> map = new HashMap<>();
     ProfilingController profilingController = new ProfilingController();
 
     public ProfilingBeanPostProcessor() throws Exception {
@@ -33,8 +29,7 @@ public class ProfilingBeanPostProcessor implements BeanPostProcessor {
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
         Class<?> beanClass = bean.getClass();
-        Profiling annotation = beanClass.getAnnotation(Profiling.class);
-        if (annotation != null) {
+        if (beanClass.isAnnotationPresent(ProfilingAnnotation.class)) {
             map.put(beanName, beanClass);
         }
         return bean;
@@ -44,21 +39,21 @@ public class ProfilingBeanPostProcessor implements BeanPostProcessor {
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         Class beanClass = map.get(beanName);
         if (beanClass != null) {
-            Proxy.newProxyInstance(beanClass.getClassLoader(), beanClass.getInterfaces(), new InvocationHandler() {
+            return Proxy.newProxyInstance(beanClass.getClassLoader(), beanClass.getInterfaces(), new InvocationHandler() {
                 @Override
                 public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-                    if (true) {
+                  //  if (true) {
                         log.info("Profiling");
                         Instant before = Instant.now();
                         Object invoke = method.invoke(bean, args);
                         Instant after = Instant.now();
                         log.info("Done");
                         long result = after.toEpochMilli() - before.toEpochMilli();
-                        System.out.println("miliseconds to run" + result);
+                        log.info("miliseconds to run = " + result);
                         return invoke;
-                    } else {
-                        return method.invoke(bean, args);
-                    }
+//                    } else {
+//                        return method.invoke(bean, args);
+//                    }
                 }
             });
         }
