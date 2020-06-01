@@ -19,11 +19,11 @@ import java.util.Map;
 @Component
 public class ProfilingBeanPostProcessor implements BeanPostProcessor {
     private Map<String, Class> map = new HashMap<>();
-    ProfilingController profilingController = new ProfilingController();
+    ProfilingController controller = new ProfilingController();
 
     public ProfilingBeanPostProcessor() throws Exception {
         MBeanServer platformMBeanServer = ManagementFactory.getPlatformMBeanServer();
-        platformMBeanServer.registerMBean(profilingController,new ObjectName("profiling","name", "controller"));
+        platformMBeanServer.registerMBean(controller,new ObjectName("profiling","name", "controller"));
     }
 
     @Override
@@ -42,7 +42,7 @@ public class ProfilingBeanPostProcessor implements BeanPostProcessor {
             return Proxy.newProxyInstance(beanClass.getClassLoader(), beanClass.getInterfaces(), new InvocationHandler() {
                 @Override
                 public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-                  //  if (true) {
+                    if (controller.isEnabled()) {
                         log.info("Profiling");
                         Instant before = Instant.now();
                         Object invoke = method.invoke(bean, args);
@@ -51,9 +51,9 @@ public class ProfilingBeanPostProcessor implements BeanPostProcessor {
                         long result = after.toEpochMilli() - before.toEpochMilli();
                         log.info("miliseconds to run = " + result);
                         return invoke;
-//                    } else {
-//                        return method.invoke(bean, args);
-//                    }
+                    } else {
+                        return method.invoke(bean, args);
+                    }
                 }
             });
         }
