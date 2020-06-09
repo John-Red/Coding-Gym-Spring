@@ -6,6 +6,7 @@ package spring;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
 public class ApplicationTest {
@@ -22,6 +23,7 @@ public class ApplicationTest {
             Singleton secondSingleton = context.getBean(Singleton.class);
             Prototype secondPrototype = secondSingleton.getPrototype();
 
+            assertEquals(firstSingleton, secondSingleton);
             assertNotEquals(firstPrototype, secondPrototype);
         }
     }
