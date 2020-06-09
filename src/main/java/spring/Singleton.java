@@ -11,14 +11,12 @@ public class Singleton {
     @Autowired
     private Prototype prototype;
 
-
     public Singleton(){
-        log.info("Singleton: I'm alive");
+        log.info("was created");
     }
 
-    @Lookup
     public Prototype getPrototype (){
-        return null;
+        return prototype;
     }
 
 }
