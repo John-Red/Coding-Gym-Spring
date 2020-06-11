@@ -5,9 +5,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-public class Singleton {
+public class SomeObject {
 
-    @InjectDefaultValue(value = "singleton")
+    @InjectDefaultValue(value = "someObject")
     private String someValue;
 
     public String getSomeValue() {

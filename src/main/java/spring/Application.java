@@ -1,6 +1,7 @@
 package spring;
 
 import org.springframework.boot.SpringApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
@@ -8,6 +9,11 @@ import org.springframework.context.annotation.Configuration;
 @ComponentScan
 public class Application {
     public static void main(String[] args) {
-        SpringApplication.run(Application.class);
+        ConfigurableApplicationContext context = SpringApplication.run(Application.class);
+
+        SomeObject someObject = context.getBean(SomeObject.class);
+        String someValue = someObject.getSomeValue();
+
+        System.out.println(someValue);
     }
 }

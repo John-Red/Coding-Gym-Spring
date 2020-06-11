@@ -12,11 +12,12 @@ public class ApplicationTest {
     @Test
     public void testAppHasAGreeting() {
         try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
-            context.register(Singleton.class);
+            context.register(SomeObject.class);
+            context.register(InjectDefaultValueBeanPostProcessor.class);
             context.refresh();
 
-            Singleton singleton = context.getBean(Singleton.class);
-            String someValue = singleton.getSomeValue();
+            SomeObject someObject = context.getBean(SomeObject.class);
+            String someValue = someObject.getSomeValue();
 
             assertEquals(someValue, "default");
         }
