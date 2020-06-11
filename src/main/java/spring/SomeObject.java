@@ -5,12 +5,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
+@MeasureTime
 public class SomeObject {
 
-    @InjectDefaultValue(value = "someObject")
-    private String someValue;
-
-    public String getSomeValue() {
-        return someValue;
+    void doSomething() {
+        while (true) {
+            System.out.println("working");
+        }
     }
 }
