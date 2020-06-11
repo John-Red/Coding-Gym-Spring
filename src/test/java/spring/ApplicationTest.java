@@ -7,24 +7,18 @@ import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 
 public class ApplicationTest {
     @Test
     public void testAppHasAGreeting() {
         try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
             context.register(Singleton.class);
-            context.register(Prototype.class);
             context.refresh();
 
-            Singleton firstSingleton = context.getBean(Singleton.class);
-            Prototype firstPrototype = firstSingleton.getPrototype();
+            Singleton singleton = context.getBean(Singleton.class);
+            String someValue = singleton.getSomeValue();
 
-            Singleton secondSingleton = context.getBean(Singleton.class);
-            Prototype secondPrototype = secondSingleton.getPrototype();
-
-            assertEquals(firstSingleton, secondSingleton);
-            assertNotEquals(firstPrototype, secondPrototype);
+            assertEquals(someValue, "default");
         }
     }
 }
