@@ -4,22 +4,10 @@
 package spring;
 
 import org.junit.Test;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
-import static org.junit.Assert.assertEquals;
 
 public class ApplicationTest {
     @Test
     public void testAppHasAGreeting() {
-        try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
-            context.register(SomeObject.class);
-            context.register(InjectDefaultValueBeanPostProcessor.class);
-            context.refresh();
 
-            SomeObject someObject = context.getBean(SomeObject.class);
-            String someValue = someObject.getSomeValue();
-
-            assertEquals(someValue, "default");
-        }
     }
 }
